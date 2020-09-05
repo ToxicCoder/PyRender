@@ -100,7 +100,7 @@ if __name__ == "__main__":
     cameraPosition = [0, 4, 2]
     lightPos = [0, 0, 4]
     
-    # Set render parameter
+    # Set render parameters
     steps = 50
     resolution = [100, 100]
     aspectRatio = resolution[0]/resolution[1]
@@ -128,7 +128,7 @@ if __name__ == "__main__":
     print(f"Rendering time : {timeTaken} : {floor(timeTaken/60)} min {round(((timeTaken/60)-floor(timeTaken/60))*60)} s") # Print time taken in seconds
 
     # Optionally save the image to a file
-    plt.imsave("render.png", final)
+    plt.imsave("Renders/render.png", final)
 
     # Display rendered & processed image
     fig, ax = plt.subplots()

@@ -17,7 +17,7 @@ def getLuminance(RGB):
     return l
 
 # Read in image
-imPath = "render.png"
+imPath = "Renders/render.png"
 imIn = Image.open(imPath)
 # Convert PIL to nump array
 img = np.asarray(imIn)/255 # /255 to convert from 8-bit to float
