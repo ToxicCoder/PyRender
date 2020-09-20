@@ -62,3 +62,27 @@ def avg(*args):
         for x in args:
             output = x + output
         return output / len(args)
+
+# Below function from : https://www.shadertoy.com/view/4tVSDm
+
+def fract(x):
+    if type(x) is list or type(x) is np.ndarray:
+        return [y - floor(y) for y in x]
+    else:
+        return x - floor(x)
+
+def hash2(seed):
+    return fract(sin(seed+0.1)*np.array((43758.5453123,22578.1459123)))
+
+def cosineWeightedHemisphere(n, seed=0):
+    r = hash2(n[0]+n[1]+n[2]+seed)
+    uu = normalize( np.cross( n, (0.0,1.0,1.0) ) )
+    vv = np.cross( uu, n )
+    ra = sqrt(r[1])
+    rx = ra*cos(6.2831*r[0])
+    ry = ra*sin(6.2831*r[0])
+    rz = sqrt( 1.0-r[1] )
+    rr = ( rx*uu + ry*vv + rz*n )
+    return normalize( rr )
+
+# Above function from : https://www.shadertoy.com/view/4tVSDm
