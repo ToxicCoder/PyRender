@@ -353,5 +353,5 @@ def shadeObjectSB(point, lightPos, material, rayDir, hit, reflectionIter=1, boun
     sceneCol = (material[0]*(dif + 0.15) + ((reflectionMaterial[0]*spec*2.0)*(1-material[1])))*atten
     directDif = (dif * atten) * material[0]
     #return difGI+sceneCol#sceneCol+difGI#gi+sceneCol#(s[1])#material[0] * (s[1]*50) #sceneCol
-    return difGI
+    return directDif + difGI
     #return difGI + directDif
