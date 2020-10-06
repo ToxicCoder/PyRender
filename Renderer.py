@@ -84,12 +84,13 @@ def renderPixel(x, y, resolution, cameraPosition, steps, lightPos, aspectRatio):
     rayPoint, hit, stepsTaken, material = rayMarch(cameraPosition, rayDir, steps, mode=[1, 2, 4, 6])
     #return [rayMarch(cameraPosition, rayDir, steps), 0, 0]
     bounces=[0, 1] # order - glossy, diffuse
-    samples=[1, 20] # order - Same as above
-    dif = shadeObject(rayPoint, lightPos, material, rayDir, hit, reflectionIter=bounces[0], bounces=bounces)
+    samples=[1, 1] # order - Same as above
+    #dif = shadeObject(rayPoint, lightPos, material, rayDir, hit, reflectionIter=bounces[0], bounces=bounces)
     #dif = shadeObjectGI(rayPoint, lightPos, material, rayDir, hit, reflectionIter=bounces[0], bounces=bounces, bouncesOrig=bounces, samples=samples)
     #dif = shadeObjectGIold(rayPoint, lightPos, material, rayDir, cameraPosition, hit, reflectionIter=bounces[0], bounces=bounces)
     #dif = shadeObjectGI(rayPoint, lightPos, material, rayDir, cameraPosition, hit, reflectionIter=bounces[0], bounces=bounces, samples=samples)
     #dif = shadeObjectGInew(rayPoint, lightPos, material, rayDir, hit, reflectionIter=bounces[0], bounces=bounces, samples=samples)
+    dif = shadeObjectSB(rayPoint, lightPos, material, rayDir, hit, reflectionIter=bounces[0], bounces=bounces, samples=samples)
     return dif
     #return calculateNormal(rayMarch(cameraPosition, rayDir, steps, mode=1))
 
