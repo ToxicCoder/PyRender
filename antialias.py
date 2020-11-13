@@ -1,4 +1,4 @@
-# CAA - Charlie Anti Aliasing
+# TAA - Terrible Anti Aliasing
 
 # Matplotlib to display output
 import matplotlib.pyplot as plt

@@ -1,6 +1,5 @@
 import numpy as np
 from math import *
-from os import system
 
 # Import custom modules
 from sdf import *
@@ -16,6 +15,8 @@ def bundleScene(unBundled, materialList, outputMode):
         return assign(unBundled[1], materialList)
     elif outputMode == 2:
         return unBundled[2]
+# Unbundled format is
+# [distance, material, flip normal?]
 
 # Define scene
 def scene1(point, outputMode=0):
@@ -68,5 +69,20 @@ def cornellBoxV2(point, outputMode=0):
     # Output
     return bundleScene(output, materialList, outputMode)
 
+def objectLightingTest(point, outputMode=0):
+    materialList = 2 # Material indices
+    # Walls
+    ground = sdPlane(point, 0, 0)
+
+    # Objects
+    sphere = sdSphere(point, [0, 0, 1], 1, 1)
+    #light = sdSphere(point, [0, 0, 4], 1, 2)
+    
+    # Combine output
+    output = opU(ground, sphere)
+    #output = opU(output, light)
+    # Output
+    return bundleScene(output, materialList, outputMode)
+
 if __name__ == "__main__":
-    print(cornellBoxV2([0, 0, 0]))
+    print(objectLightingTest([0, 0, 0]))

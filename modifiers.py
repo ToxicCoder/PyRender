@@ -3,6 +3,8 @@ from numpy import sin, cos
 
 # Constructive solid geometry
 
+# Only union works at the moment
+
 def opU(a, b): # Union
     return a if a[0] < b[0] else b
 

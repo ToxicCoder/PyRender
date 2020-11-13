@@ -14,7 +14,7 @@ from helpers import *
 from modifiers import *
 from materials import *
 from shadingFunctions import *
-from scene import scene1 as sdf_scene # cornellBoxV1  scene1
+from scene import objectLightingTest as sdf_scene # cornellBoxV1  scene1
 
 # Rendering functions
 def rayMarch(start, directionVector, maxSteps=100, clipStart=0, clipEnd=1000, accuracy=0.0001, k=4, mode=[0]): # Multiuse raymarching function
@@ -64,7 +64,7 @@ def rayMarch(start, directionVector, maxSteps=100, clipStart=0, clipEnd=1000, ac
             outputs.append(shadow)
         elif x == 6:
             material = sdf_scene(point, outputMode=1)
-            outputs.append((np.array(material[0]), material[1]))
+            outputs.append([np.array(material[0])]+material[1:])
     if len(outputs) == 1:
         return outputs[0]
     return outputs
@@ -83,16 +83,21 @@ def renderPixel(x, y, resolution, cameraPosition, steps, lightPos, aspectRatio):
     rayDir = [x/(resolution[0]/(xMax*2))-xMax, -1, y/(resolution[1]/(yMax*2))-yMax]
     rayPoint, hit, stepsTaken, material = rayMarch(cameraPosition, rayDir, steps, mode=[1, 2, 4, 6])
     #return [rayMarch(cameraPosition, rayDir, steps), 0, 0]
-    bounces=[0, 1] # order - glossy, diffuse
+    bounces=[0, 2] # order - glossy, diffuse
     samples=[1, 10] # order - Same as above
     #dif = shadeObject(rayPoint, lightPos, material, rayDir, hit, reflectionIter=bounces[0], bounces=bounces)
-    #dif = shadeObjectGI(rayPoint, lightPos, material, rayDir, hit, reflectionIter=bounces[0], bounces=bounces, bouncesOrig=bounces, samples=samples)
-    #dif = shadeObjectGIold(rayPoint, lightPos, material, rayDir, cameraPosition, hit, reflectionIter=bounces[0], bounces=bounces)
-    #dif = shadeObjectGI(rayPoint, lightPos, material, rayDir, cameraPosition, hit, reflectionIter=bounces[0], bounces=bounces, samples=samples)
-    #dif = shadeObjectGInew(rayPoint, lightPos, material, rayDir, hit, reflectionIter=bounces[0], bounces=bounces, samples=samples)
-    dif = shadeObjectSB(rayPoint, lightPos, material, rayDir, hit, reflectionIter=bounces[0], bounces=bounces, samples=samples)
+    if length(rayPoint, cameraPosition) < 100:
+        dif = shadeObjectSB(rayPoint, lightPos, material, rayDir, hit, reflectionIter=bounces[0], maxBounces=bounces, samples=samples)
+    else:
+        dif = np.array([0, 0, 0])
     return dif
     #return calculateNormal(rayMarch(cameraPosition, rayDir, steps, mode=1))
+
+"""
+1 b - 60s
+2 b - 75s
+3 b - 102s
+"""
 
 def singlePixelMap(resolution, cameraPosition, steps, lightPos, aspectRatio, x): # Run "renderPixel" function - used in "pool.map" for multiprocessing
     xPos, yPos = getLine(x, resolution[0], resolution[1])
@@ -117,7 +122,7 @@ if __name__ == "__main__":
     # Add arguments to render function
     singlePixelMapPartial = partial(singlePixelMap, resolution, cameraPosition, steps, lightPos, aspectRatio)
     # Render image using pool
-    renderedImage = pool.map(singlePixelMapPartial, range(resolution[0]*resolution[1]))
+    renderedImage = pool.map(singlePixelMapPartial, range(resolution[0]*resolution[1])) # send input as string instead
 
     # Shape conversion
     final = []

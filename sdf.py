@@ -1,4 +1,5 @@
 import numpy as np
+
 # Custom imports
 from modifiers import *
 from helpers import *
@@ -25,3 +26,9 @@ def sdTorus(point, location, t, materialID=0, normal=False):
     point = np.array(point)-np.array(location)
     q = (length([point[0], point[1], 0], [0, 0, 0])-t[0], point[2], 0)
     return [length([q[0], q[1], q[2]], [0, 0, 0])-t[1], materialID, normal]
+
+def sdBox(p, b, materialID=0, normal=False):
+    p = np.array(p)
+    b = np.array(b)
+    q = np.array(abs(p) - b)
+    return [length(max(q,0.0)) + min(max(q[0],max(q[1],q[2])),0.0), materialID, normal]
